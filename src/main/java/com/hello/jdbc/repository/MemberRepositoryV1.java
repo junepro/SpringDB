@@ -20,13 +20,13 @@ public class MemberRepositoryV1 {
     public MemberRepositoryV1(DataSource dataSource) {
         this.dataSource = dataSource;
     }
+
     public Member save(Member member) throws SQLException {
 
-        String sql = "insert into member(member_id, money) values(?, ?)";
+        String sql = "insert into mem(member_id, money) values(?, ?)";
 
         Connection con = null;
         PreparedStatement pstmt = null;
-
 
         try {
             con = getConnection();
@@ -49,7 +49,6 @@ public class MemberRepositoryV1 {
         JdbcUtils.closeConnection(con);
 
     }
-
     private Connection getConnection() throws SQLException {
         Connection con = dataSource.getConnection();
         log.info("get connection={}, class={}", con, con.getClass());

@@ -22,6 +22,8 @@ public class ConnectionTest {
         log.info("connection={}, class={}", con2, con2.getClass());
     }
 
+
+    //datasource 사용시 설정과 사용 분리 이점점
     @Test
     void dataSourceDriverManager() throws SQLException {
         //DriverManagerDataSource - 항상 새로운 커넥션 획득
@@ -29,15 +31,10 @@ public class ConnectionTest {
                 USERNAME, PASSWORD);
         useDataSource(dataSource);
     }
-    private void useDataSource(DataSource dataSource) throws SQLException {
-        Connection con1 = dataSource.getConnection();
-        Connection con2 = dataSource.getConnection();
-        log.info("connection={}, class={}", con1, con1.getClass());
-        log.info("connection={}, class={}", con2, con2.getClass());
-    }
+
     @Test
     void dataSourceConnectionPool() throws SQLException, InterruptedException {
-        //커넥션 풀링: HikariProxyConnection(Proxy) -> JdbcConnection(Target)
+        //커넨셕 풀링
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(URL);
         dataSource.setUsername(USERNAME);
@@ -46,8 +43,13 @@ public class ConnectionTest {
         dataSource.setPoolName("MyPool");
 
         useDataSource(dataSource);
-        Thread.sleep(1000); //커넥션 풀에서 커넥션 생성 시간 대기
+        Thread.sleep(1000);
     }
 
-
+    private void useDataSource(DataSource dataSource) throws SQLException {
+        Connection con1 = dataSource.getConnection();
+        Connection con2 = dataSource.getConnection();
+        log.info("connection={}, class={}", con1, con1.getClass());
+        log.info("connection={}, class={}", con2, con2.getClass());
+    }
 }

@@ -15,20 +15,20 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @Slf4j
 class MemberRepositoryV1Test {
-
-    MemberRepositoryV1 repository;
+    MemberRepositoryV1 memberRepositoryV1;
 
     @BeforeEach
     void beforeEach() {
-        //기본 driverManager
+        //기본 DriverManager  - 항상 새로운 커넥션을 획득
 //        DriverManagerDataSource dataSource = new DriverManagerDataSource(URL, USERNAME, PASSWORD);
-//        repository = new MemberRepositoryV1(dataSource);
+
+        //히카리 사용시 커넥션풀 재사용 가능 CON0 번 계쏙 씀
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(URL);
         dataSource.setUsername(USERNAME);
         dataSource.setPoolName(PASSWORD);
 
-        repository = new MemberRepositoryV1(dataSource);
+        memberRepositoryV1 = new MemberRepositoryV1(dataSource);
 
     }
 
@@ -36,20 +36,20 @@ class MemberRepositoryV1Test {
     void crud() throws SQLException {
         //save
         Member member = new Member("memberV0", 10000);
-        repository.save(member);
+        memberRepositoryV1.save(member);
         //findById
-        Member findMember = repository.findById(member.getMemberId());
+        Member findMember = memberRepositoryV1.findById(member.getMemberId());
         log.info("findMember={}", findMember);
         assertThat(findMember).isEqualTo(member);
 
         //update: money: 10000 -> 20000
-        repository.update(member.getMemberId(), 20000);
-        Member updatedMember = repository.findById(member.getMemberId());
+        memberRepositoryV1.update(member.getMemberId(), 20000);
+        Member updatedMember = memberRepositoryV1.findById(member.getMemberId());
         assertThat(updatedMember.getMoney()).isEqualTo(20000);
 
         //delete
-        repository.delete(member.getMemberId());
-        assertThatThrownBy(() -> repository.findById(member.getMemberId()))
+        memberRepositoryV1.delete(member.getMemberId());
+        assertThatThrownBy(() -> memberRepositoryV1.findById(member.getMemberId()))
                 .isInstanceOf(NoSuchElementException.class);
     }
 
