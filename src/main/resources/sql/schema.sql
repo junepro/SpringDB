@@ -18,3 +18,8 @@ create table member (
 -- insert into member(member_id, money) values ('data2',10000);
 -- commit;
 --
+
+
+--session lock
+-- SET LOCK TIMEOUT 60000;
+-- SET autocommit false;
