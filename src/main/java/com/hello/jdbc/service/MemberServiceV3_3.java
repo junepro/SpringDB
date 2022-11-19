@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 
 /**
- * 트랜잭션 - 트랜잭션 템플릿 - 트랜잭션 반복하는 코드 제거 할 수 있슴 (TRY ~CATCH)
+ * 트랜잭션 - @Transactional 사용
  */
 
 @Slf4j
